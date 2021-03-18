@@ -1,3 +1,8 @@
+## 4.1.0-dev
+
+- Correctly handle nullable generic fields (`T?`) with
+  `genericArgumentFactories`.
+
 ## 4.0.3
 
 - Correctly handle nullable values with `genericArgumentFactories`.
