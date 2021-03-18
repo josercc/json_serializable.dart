@@ -58,7 +58,9 @@ const _fromJsonHelperName = r'_$nullableGenericFromJson';
 
 const _fromJsonHelper = '''
 T? $_fromJsonHelperName<T>(
-        Object? input, T Function(Object? json) fromJson) =>
+  Object? input,
+  T Function(Object? json) fromJson,
+) =>
     input == null ? null : fromJson(input);
 ''';
 
@@ -66,7 +68,9 @@ const _toJsonHelperName = r'_$nullableGenericToJson';
 
 const _toJsonHelper = '''
 Object? $_toJsonHelperName<T>(
-        T? input, Object? Function(T value) toJson) =>
+  T? input,
+  Object? Function(T value) toJson,
+) =>
     input == null ? null : toJson(input);
 ''';
 
