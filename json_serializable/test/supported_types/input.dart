@@ -2,8 +2,6 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
-// @dart=2.12
-
 import 'package:json_annotation/json_annotation.dart';
 
 part 'input.g.dart';
@@ -12,16 +10,19 @@ part 'input.g.dart';
 class SimpleClass {
   final dynamic value;
 
+  @JsonKey(nullable: false)
+  final dynamic nullable;
+
   @JsonKey(defaultValue: 42)
   dynamic withDefault;
 
   SimpleClass(
     this.value,
-    this.withDefault,
+    this.nullable,
   );
 
-  factory SimpleClass.fromJson(Map<String, Object?> json) =>
+  factory SimpleClass.fromJson(Map<String, dynamic> json) =>
       _$SimpleClassFromJson(json);
 
-  Map<String, Object?> toJson() => _$SimpleClassToJson(this);
+  Map<String, dynamic> toJson() => _$SimpleClassToJson(this);
 }

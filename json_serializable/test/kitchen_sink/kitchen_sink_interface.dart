@@ -2,23 +2,15 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
-// @dart=2.12
-
 import 'package:collection/collection.dart';
-
 import 'simple_object.dart';
 
 abstract class KitchenSinkFactory<K, V> {
   String get description;
-
   bool get anyMap;
-
   bool get checked;
-
   bool get nullable;
-
   bool get excludeNull;
-
   bool get explicitToJson;
 
   KitchenSink ctor({
@@ -45,69 +37,43 @@ abstract class JsonConverterTestClass {
 }
 
 abstract class KitchenSink {
-  int? get ctorValidatedNo42;
+  int get ctorValidatedNo42;
+  DateTime dateTime;
+  BigInt bigInt;
 
-  DateTime? dateTime;
-  BigInt? bigInt;
-
-  Iterable? get iterable;
-
+  Iterable get iterable;
   Iterable<dynamic> get dynamicIterable;
-
   Iterable<Object> get objectIterable;
-
   Iterable<int> get intIterable;
 
   Iterable<DateTime> get dateTimeIterable;
 
-  List get list;
+  List list;
+  List<dynamic> dynamicList;
+  List<Object> objectList;
+  List<int> intList;
+  List<DateTime> dateTimeList;
 
-  List<dynamic> get dynamicList;
+  Set set;
+  Set<dynamic> dynamicSet;
+  Set<Object> objectSet;
+  Set<int> intSet;
+  Set<DateTime> dateTimeSet;
 
-  List<Object> get objectList;
+  Map map;
+  Map<String, String> stringStringMap;
+  Map<dynamic, int> dynamicIntMap;
+  Map<Object, DateTime> objectDateTimeMap;
 
-  List<int> get intList;
+  List<Map<String, Map<String, List<List<DateTime>>>>> crazyComplex;
 
-  List<DateTime> get dateTimeList;
-
-  set dateTimeList(List<DateTime> value);
-
-  Set get set;
-
-  Set<dynamic> get dynamicSet;
-
-  Set<Object> get objectSet;
-
-  Set<int> get intSet;
-
-  Set<DateTime> get dateTimeSet;
-
-  Map get map;
-
-  set map(Map value);
-
-  Map<String, String> get stringStringMap;
-
-  Map<dynamic, int> get dynamicIntMap;
-
-  Map<Object, DateTime> get objectDateTimeMap;
-
-  set objectDateTimeMap(Map<Object, DateTime> value);
-
-  List<Map<String, Map<String, List<List<DateTime>?>?>?>?> get crazyComplex;
-
-  set crazyComplex(
-    List<Map<String, Map<String, List<List<DateTime>?>?>?>?> value,
-  );
-
-  Map<String, bool> get val;
-
-  bool? writeNotNull;
-  String? string;
+  Map<String, bool> val;
+  bool writeNotNull;
+  String string;
 
   SimpleObject get simpleObject;
 
-  int? validatedPropertyNo42;
+  int validatedPropertyNo42;
 
   Map<String, dynamic> toJson();
 }
@@ -136,5 +102,5 @@ bool sinkEquals(KitchenSink a, Object other) =>
     a.writeNotNull == other.writeNotNull &&
     a.string == other.string;
 
-bool _deepEquals(Object? a, Object? b) =>
+bool _deepEquals(Object a, Object b) =>
     const DeepCollectionEquality().equals(a, b);

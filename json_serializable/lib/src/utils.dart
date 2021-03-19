@@ -4,7 +4,6 @@
 
 import 'package:analyzer/dart/constant/value.dart';
 import 'package:analyzer/dart/element/element.dart';
-import 'package:analyzer/dart/element/nullability_suffix.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:meta/meta.dart' show alwaysThrows, required;
@@ -88,6 +87,7 @@ JsonSerializable _valueForAnnotation(ConstantReader reader) => JsonSerializable(
           reader.read('genericArgumentFactories').literalValue as bool,
       ignoreUnannotated: reader.read('ignoreUnannotated').literalValue as bool,
       includeIfNull: reader.read('includeIfNull').literalValue as bool,
+      nullable: reader.read('nullable').literalValue as bool,
     );
 
 /// Returns a [JsonSerializable] with values from the [JsonSerializable]
@@ -120,6 +120,7 @@ JsonSerializable mergeConfig(
             config.genericArgumentFactories),
     ignoreUnannotated: annotation.ignoreUnannotated ?? config.ignoreUnannotated,
     includeIfNull: annotation.includeIfNull ?? config.includeIfNull,
+    nullable: annotation.nullable ?? config.nullable,
   );
 }
 
@@ -269,9 +270,4 @@ extension DartTypeExtension on DartType {
       // If the library is `null`, treat it like dynamic => `true`
       element.library == null ||
       element.library.typeSystem.isAssignableTo(this, other);
-}
-
-extension TypeExtension on DartType {
-  bool get isNullableType =>
-      isDynamic || nullabilitySuffix == NullabilitySuffix.question;
 }

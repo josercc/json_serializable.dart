@@ -8,7 +8,6 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:meta/meta.dart';
 import 'package:source_gen/source_gen.dart';
 
-import 'constants.dart';
 import 'json_key_utils.dart';
 import 'type_helper.dart';
 import 'type_helper_ctx.dart';
@@ -52,7 +51,7 @@ abstract class HelperCore {
 
   @protected
   TypeHelperCtx getHelperContext(FieldElement field) =>
-      typeHelperContext(this, field);
+      typeHelperContext(this, field, jsonKeyFor(field));
 }
 
 InvalidGenerationSourceError createInvalidGenerationError(
@@ -89,6 +88,14 @@ $converterOrKeyInstructions''';
     element: field,
   );
 }
+
+@visibleForTesting
+const converterOrKeyInstructions = r'''
+* Use `JsonConverter`
+  https://pub.dev/documentation/json_annotation/latest/json_annotation/JsonConverter-class.html
+* Use `JsonKey` fields `fromJson` and `toJson`
+  https://pub.dev/documentation/json_annotation/latest/json_annotation/JsonKey/fromJson.html
+  https://pub.dev/documentation/json_annotation/latest/json_annotation/JsonKey/toJson.html''';
 
 /// Returns a [String] representing the type arguments that exist on
 /// [element].
@@ -133,17 +140,13 @@ String genericClassArguments(ClassElement element, bool withConstraints) {
 /// types and locations of these files in code. Specifically, it supports
 /// only [InterfaceType]s, with optional type arguments that are also should
 /// be [InterfaceType]s.
-String typeToCode(
-  DartType type, {
-  bool forceNullable = false,
-}) {
+String typeToCode(DartType type) {
   if (type.isDynamic) {
     return 'dynamic';
   } else if (type is InterfaceType) {
     final typeArguments = type.typeArguments;
     if (typeArguments.isEmpty) {
-      final nullablePostfix = (type.isNullableType || forceNullable) ? '?' : '';
-      return '${type.element.name}$nullablePostfix';
+      return type.element.name;
     } else {
       final typeArgumentsCode = typeArguments.map(typeToCode).join(', ');
       return '${type.element.name}<$typeArgumentsCode>';

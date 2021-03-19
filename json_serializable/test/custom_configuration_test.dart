@@ -6,7 +6,6 @@
 import 'dart:async';
 
 import 'package:analyzer/dart/element/type.dart';
-import 'package:build/experiments.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:json_serializable/json_serializable.dart';
 import 'package:json_serializable/src/constants.dart';
@@ -22,12 +21,9 @@ LibraryReader _libraryReader;
 
 Future<void> main() async {
   initializeBuildLogTracking();
-  _libraryReader = await withEnabledExperiments(
-    () => initializeLibraryReaderForDirectory(
-      p.join('test', 'test_sources'),
-      'test_sources.dart',
-    ),
-    ['non-nullable'],
+  _libraryReader = await initializeLibraryReaderForDirectory(
+    p.join('test', 'test_sources'),
+    'test_sources.dart',
   );
 
   group('without wrappers', () {
@@ -192,10 +188,7 @@ Map<String, dynamic> _$TrivialNestedNonNullableToJson(
       final output =
           await runForElementNamed('ParentObjectWithDynamicChildren');
 
-      expect(
-        output,
-        contains('children = json[\'children\'] as List<dynamic>;'),
-      );
+      expect(output, contains('children = json[\'children\'] as List;'));
     });
   });
 
@@ -214,12 +207,8 @@ class _ConfigLogger implements TypeHelper<TypeHelperContextWithConfig> {
   const _ConfigLogger();
 
   @override
-  Object deserialize(
-    DartType targetType,
-    String expression,
-    TypeHelperContextWithConfig context,
-    bool defaultProvided,
-  ) {
+  Object deserialize(DartType targetType, String expression,
+      TypeHelperContextWithConfig context) {
     configurations.add(context.config);
     return null;
   }

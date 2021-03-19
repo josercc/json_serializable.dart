@@ -2,8 +2,6 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
-// @dart=2.12
-
 part of '_json_serializable_test_input.dart';
 
 @ShouldThrow(
@@ -17,7 +15,7 @@ $converterOrKeyInstructions
 )
 @JsonSerializable()
 class Issue713<TResult> {
-  List<TResult>? result;
+  List<TResult> result;
 }
 
 @ShouldGenerate(r'''
@@ -44,26 +42,26 @@ Map<String, dynamic> _$GenericClassToJson<T extends num, S>(
 @JsonSerializable()
 class GenericClass<T extends num, S> {
   @JsonKey(fromJson: _dataFromJson, toJson: _dataToJson)
-  late Object fieldObject;
+  Object fieldObject;
 
   @JsonKey(fromJson: _dataFromJson, toJson: _dataToJson)
   dynamic fieldDynamic;
 
   @JsonKey(fromJson: _dataFromJson, toJson: _dataToJson)
-  late int fieldInt;
+  int fieldInt;
 
   @JsonKey(fromJson: _dataFromJson, toJson: _dataToJson)
-  late T fieldT;
+  T fieldT;
 
   @JsonKey(fromJson: _dataFromJson, toJson: _dataToJson)
-  late S fieldS;
+  S fieldS;
 
   GenericClass();
 }
 
-T _dataFromJson<T extends num>(Object? input) => throw UnimplementedError();
+T _dataFromJson<T extends num>(Object input) => null;
 
-Object _dataToJson<T extends num>(T input) => throw UnimplementedError();
+Object _dataToJson<T extends num>(T input) => null;
 
 @ShouldGenerate(
   r'''

@@ -2,16 +2,12 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
-// @dart=2.12
-
 import 'dart:convert';
 
-import 'package:stack_trace/stack_trace.dart';
 import 'package:test/test.dart';
 
-final throwsTypeError = throwsA(isTypeError);
-
-final isTypeError = isA<TypeError>();
+// ignore: deprecated_member_use
+final throwsCastError = throwsA(isA<CastError>());
 
 T roundTripObject<T>(T object, T Function(Map<String, dynamic> json) factory) {
   final data = loudEncode(object);
@@ -27,30 +23,17 @@ T roundTripObject<T>(T object, T Function(Map<String, dynamic> json) factory) {
 }
 
 /// Prints out nested causes before throwing `JsonUnsupportedObjectError`.
-String loudEncode(Object? object) {
+String loudEncode(Object object) {
   try {
     return const JsonEncoder.withIndent(' ').convert(object);
-  } catch (e) {
-    if (e is JsonUnsupportedObjectError) {
-      Object? error = e;
-
-      var count = 1;
-
-      while (error is JsonUnsupportedObjectError) {
-        print(
-          '(${count++}) $error ${error.unsupportedObject} (${error.unsupportedObject.runtimeType}) !!!',
-        );
-        print(Trace.from(error.stackTrace!).terse);
-        error = error.cause;
-      }
-
-      if (error != null) {
-        print('(${count++}) $error ???');
-        if (error is Error) {
-          print(Trace.from(error.stackTrace!).terse);
-        }
-      }
-    }
+  } on JsonUnsupportedObjectError catch (e) // ignore: avoid_catching_errors
+  {
+    var error = e;
+    do {
+      final cause = error.cause;
+      print(cause);
+      error = (cause is JsonUnsupportedObjectError) ? cause : null;
+    } while (error != null);
     rethrow;
   }
 }

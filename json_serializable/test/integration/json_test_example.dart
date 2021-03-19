@@ -2,8 +2,6 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
-// @dart=2.12
-
 // ignore_for_file: hash_and_equals
 import 'dart:collection';
 
@@ -15,18 +13,17 @@ part 'json_test_example.g.dart';
 
 @JsonSerializable()
 class Person {
-  final String firstName, lastName;
-  final String? middleName;
-  final DateTime? dateOfBirth;
+  final String firstName, middleName, lastName;
+  final DateTime dateOfBirth;
   @JsonKey(name: '\$house')
   final Category house;
 
-  Order? order;
+  Order order;
 
-  MyList<Order>? customOrders;
+  MyList<Order> customOrders;
 
-  Map<String, Category>? houseMap;
-  Map<Category, int>? categoryCounts;
+  Map<String, Category> houseMap;
+  Map<Category, int> categoryCounts;
 
   Person(this.firstName, this.lastName, this.house,
       {this.middleName, this.dateOfBirth});
@@ -50,39 +47,41 @@ class Person {
 class Order {
   /// Used to test that `disallowNullValues: true` forces `includeIfNull: false`
   @JsonKey(disallowNullValue: true)
-  int? count;
-  bool? isRushed;
+  int count;
+  bool isRushed;
 
-  Duration? duration;
+  Duration duration;
 
-  final Category? category;
-  final UnmodifiableListView<Item>? items;
-  Platform? platform;
-  Map<String, Platform>? altPlatforms;
+  @JsonKey(nullable: false)
+  final Category category;
+  final UnmodifiableListView<Item> items;
+  Platform platform;
+  Map<String, Platform> altPlatforms;
 
-  Uri? homepage;
+  Uri homepage;
 
   @JsonKey(
     name: 'status_code',
     defaultValue: StatusCode.success,
+    nullable: true,
     unknownEnumValue: StatusCode.unknown,
   )
-  StatusCode? statusCode;
+  StatusCode statusCode;
 
   @JsonKey(ignore: true)
-  String get platformValue => platform!.description;
+  String get platformValue => platform?.description;
 
   set platformValue(String value) {
     throw UnimplementedError('not impld');
   }
 
   // Ignored getter without value set in ctor
-  int get price => items!.fold(0, (total, item) => item.price! + total);
+  int get price => items.fold(0, (total, item) => item.price + total);
 
   @JsonKey(ignore: true)
-  bool? shouldBeCached;
+  bool shouldBeCached;
 
-  Order(this.category, [Iterable<Item>? items])
+  Order(this.category, [Iterable<Item> items])
       : items = UnmodifiableListView<Item>(
             List<Item>.unmodifiable(items ?? const <Item>[]));
 
@@ -102,11 +101,11 @@ class Order {
 @JsonSerializable()
 class Item extends ItemCore {
   @JsonKey(includeIfNull: false, name: 'item-number')
-  int? itemNumber;
-  List<DateTime>? saleDates;
-  List<int>? rates;
+  int itemNumber;
+  List<DateTime> saleDates;
+  List<int> rates;
 
-  Item([int? price]) : super(price);
+  Item([int price]) : super(price);
 
   factory Item.fromJson(Map<String, dynamic> json) => _$ItemFromJson(json);
 
@@ -122,17 +121,18 @@ class Item extends ItemCore {
 
 @JsonSerializable()
 class Numbers {
-  List<int>? ints;
-  List<num>? nums;
-  List<double>? doubles;
+  List<int> ints;
+  List<num> nums;
+  List<double> doubles;
 
-  List<double>? nnDoubles;
+  @JsonKey(nullable: false)
+  List<double> nnDoubles;
 
   @JsonKey(fromJson: durationFromInt, toJson: durationToInt)
-  Duration? duration;
+  Duration duration;
 
   @JsonKey(fromJson: dateTimeFromEpochUs, toJson: dateTimeToEpochUs)
-  DateTime? date;
+  DateTime date;
 
   Numbers();
 
@@ -154,10 +154,10 @@ class Numbers {
 
 @JsonSerializable()
 class MapKeyVariety {
-  Map<int, int>? intIntMap;
-  Map<Uri, int>? uriIntMap;
-  Map<DateTime, int>? dateTimeIntMap;
-  Map<BigInt, int>? bigIntMap;
+  Map<int, int> intIntMap;
+  Map<Uri, int> uriIntMap;
+  Map<DateTime, int> dateTimeIntMap;
+  Map<BigInt, int> bigIntMap;
 
   MapKeyVariety();
 
@@ -178,16 +178,16 @@ class MapKeyVariety {
 @JsonSerializable(createToJson: false)
 class UnknownEnumValue {
   @JsonKey(unknownEnumValue: Category.notDiscoveredYet)
-  late Category enumValue;
+  Category enumValue;
 
   @JsonKey(unknownEnumValue: Category.notDiscoveredYet)
-  late Iterable<Category> enumIterable;
+  Iterable<Category> enumIterable;
 
   @JsonKey(unknownEnumValue: Category.notDiscoveredYet)
-  late List<Category> enumList;
+  List<Category> enumList;
 
   @JsonKey(unknownEnumValue: Category.notDiscoveredYet)
-  late Set<Category> enumSet;
+  Set<Category> enumSet;
 
   UnknownEnumValue();
 

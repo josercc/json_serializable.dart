@@ -2,8 +2,6 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
-// @dart=2.12
-
 part of '_json_serializable_test_input.dart';
 
 int _toInt(bool input) => 42;
@@ -12,9 +10,9 @@ int _twoArgFunction(int a, int b) => 42;
 
 dynamic _toDynamic(dynamic input) => null;
 
-Object _toObject(Object input) => throw UnimplementedError();
+Object _toObject(Object input) => null;
 
-String _toStringFromObject(Object? input) => throw UnimplementedError();
+String _toStringFromObject(Object input) => null;
 
 @ShouldThrow(
   'Error with `@JsonKey` on `field`. The `fromJson` function `_toInt` '
@@ -24,7 +22,7 @@ String _toStringFromObject(Object? input) => throw UnimplementedError();
 @JsonSerializable()
 class BadFromFuncReturnType {
   @JsonKey(fromJson: _toInt)
-  late String field;
+  String field;
 }
 
 @ShouldThrow(
@@ -35,7 +33,7 @@ class BadFromFuncReturnType {
 @JsonSerializable()
 class InvalidFromFunc2Args {
   @JsonKey(fromJson: _twoArgFunction)
-  late String field;
+  String field;
 }
 
 @ShouldGenerate(
@@ -56,10 +54,10 @@ Map<String, dynamic> _$ValidToFromFuncClassStaticToJson(
 )
 @JsonSerializable()
 class ValidToFromFuncClassStatic {
-  static String _staticFunc(String param) => throw UnimplementedError();
+  static String _staticFunc(String param) => null;
 
   @JsonKey(fromJson: _staticFunc, toJson: _staticFunc)
-  late String field;
+  String field;
 }
 
 @ShouldThrow(
@@ -70,7 +68,7 @@ class ValidToFromFuncClassStatic {
 @JsonSerializable()
 class BadToFuncReturnType {
   @JsonKey(toJson: _toInt)
-  late String field;
+  String field;
 }
 
 @ShouldThrow(
@@ -81,7 +79,7 @@ class BadToFuncReturnType {
 @JsonSerializable()
 class InvalidToFunc2Args {
   @JsonKey(toJson: _twoArgFunction)
-  late String field;
+  String field;
 }
 
 @ShouldGenerate(
@@ -91,7 +89,7 @@ class InvalidToFunc2Args {
 @JsonSerializable()
 class ObjectConvertMethods {
   @JsonKey(fromJson: _toStringFromObject, toJson: _toObject)
-  late String field;
+  String field;
 }
 
 @ShouldGenerate(
@@ -102,10 +100,10 @@ class ObjectConvertMethods {
 @JsonSerializable()
 class DynamicConvertMethods {
   @JsonKey(fromJson: _toDynamic, toJson: _toDynamic)
-  late String field;
+  String field;
 }
 
-String _toString(String input) => 'null';
+String _toString(String input) => null;
 
 @ShouldGenerate(
   "_toString(json['field'] as String)",
@@ -115,7 +113,7 @@ String _toString(String input) => 'null';
 @JsonSerializable()
 class TypedConvertMethods {
   @JsonKey(fromJson: _toString, toJson: _toString)
-  late String field;
+  String field;
 }
 
 @ShouldGenerate(
@@ -134,19 +132,24 @@ Map<String, dynamic> _$ToJsonNullableFalseIncludeIfNullFalseToJson(
   return val;
 }
 ''',
+  expectedLogItems: [
+    'The `JsonKey.nullable` value on '
+        '`ToJsonNullableFalseIncludeIfNullFalse.field` will be ignored because '
+        'a custom conversion function is being used.',
+  ],
   configurations: ['default'],
 )
 @JsonSerializable(createFactory: false)
 class ToJsonNullableFalseIncludeIfNullFalse {
-  @JsonKey(toJson: _toString, includeIfNull: false)
-  late String field;
+  @JsonKey(toJson: _toString, includeIfNull: false, nullable: false)
+  String field;
 }
 
-String _fromDynamicMap(Map input) => '';
+String _fromDynamicMap(Map input) => null;
 
-String _fromDynamicList(List input) => 'null';
+String _fromDynamicList(List input) => null;
 
-String _fromDynamicIterable(Iterable input) => 'null';
+String _fromDynamicIterable(Iterable input) => null;
 
 @ShouldGenerate(
   r'''
@@ -163,43 +166,14 @@ FromDynamicCollection _$FromDynamicCollectionFromJson(
 @JsonSerializable(createToJson: false)
 class FromDynamicCollection {
   @JsonKey(fromJson: _fromDynamicMap)
-  late String mapField;
+  String mapField;
   @JsonKey(fromJson: _fromDynamicList)
-  late String listField;
+  String listField;
   @JsonKey(fromJson: _fromDynamicIterable)
-  late String iterableField;
+  String iterableField;
 }
 
-String _fromNullableDynamicMap(Map? input) => '';
-
-String _fromNullableDynamicList(List? input) => 'null';
-
-String _fromNullableDynamicIterable(Iterable? input) => 'null';
-
-@ShouldGenerate(
-  r'''
-FromNullableDynamicCollection _$FromNullableDynamicCollectionFromJson(
-    Map<String, dynamic> json) {
-  return FromNullableDynamicCollection()
-    ..mapField = _fromNullableDynamicMap(json['mapField'] as Map?)
-    ..listField = _fromNullableDynamicList(json['listField'] as List?)
-    ..iterableField =
-        _fromNullableDynamicIterable(json['iterableField'] as List?);
-}
-''',
-  configurations: ['default'],
-)
-@JsonSerializable(createToJson: false)
-class FromNullableDynamicCollection {
-  @JsonKey(fromJson: _fromNullableDynamicMap)
-  late String mapField;
-  @JsonKey(fromJson: _fromNullableDynamicList)
-  late String listField;
-  @JsonKey(fromJson: _fromNullableDynamicIterable)
-  late String iterableField;
-}
-
-String _noArgs() => throw UnimplementedError();
+String _noArgs() => null;
 
 @ShouldThrow(
   'Error with `@JsonKey` on `field`. The `fromJson` function '
@@ -209,10 +183,10 @@ String _noArgs() => throw UnimplementedError();
 @JsonSerializable(createToJson: false)
 class BadNoArgs {
   @JsonKey(fromJson: _noArgs)
-  String? field;
+  String field;
 }
 
-String? _twoArgs(a, b) => null;
+String _twoArgs(a, b) => null;
 
 @ShouldThrow(
   'Error with `@JsonKey` on `field`. The `fromJson` function '
@@ -222,10 +196,10 @@ String? _twoArgs(a, b) => null;
 @JsonSerializable(createToJson: false)
 class BadTwoRequiredPositional {
   @JsonKey(fromJson: _twoArgs)
-  String? field;
+  String field;
 }
 
-String? _oneNamed({a}) => null;
+String _oneNamed({a}) => null;
 
 @ShouldThrow(
   'Error with `@JsonKey` on `field`. The `fromJson` function '
@@ -235,32 +209,32 @@ String? _oneNamed({a}) => null;
 @JsonSerializable(createToJson: false)
 class BadOneNamed {
   @JsonKey(fromJson: _oneNamed)
-  String? field;
+  String field;
 }
 
-String _oneNormalOnePositional(a, [b]) => throw UnimplementedError();
+String _oneNormalOnePositional(a, [b]) => null;
 
 @ShouldGenerate("_oneNormalOnePositional(json['field'])", contains: true)
 @JsonSerializable(createToJson: false)
 class OkayOneNormalOptionalPositional {
   @JsonKey(fromJson: _oneNormalOnePositional)
-  String? field;
+  String field;
 }
 
-String _oneNormalOptionalNamed(a, {b}) => throw UnimplementedError();
+String _oneNormalOptionalNamed(a, {b}) => null;
 
 @ShouldGenerate("_oneNormalOptionalNamed(json['field'])", contains: true)
 @JsonSerializable(createToJson: false)
 class OkayOneNormalOptionalNamed {
   @JsonKey(fromJson: _oneNormalOptionalNamed)
-  String? field;
+  String field;
 }
 
-String _onlyOptionalPositional([a, b]) => throw UnimplementedError();
+String _onlyOptionalPositional([a, b]) => null;
 
 @ShouldGenerate("_onlyOptionalPositional(json['field'])", contains: true)
 @JsonSerializable(createToJson: false)
 class OkayOnlyOptionalPositional {
   @JsonKey(fromJson: _onlyOptionalPositional)
-  String? field;
+  String field;
 }

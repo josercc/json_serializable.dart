@@ -2,8 +2,6 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
-// @dart=2.12
-
 import 'dart:convert';
 
 import 'package:test/test.dart';
@@ -42,16 +40,15 @@ void main() {
     });
     test('with bad arguments', () {
       expect(
-        () => GenericClass<double, String>()
-          ..fieldT = (true as dynamic) as double,
-        throwsTypeError,
-      );
+          () => GenericClass<double, String>()
+            ..fieldT = (true as dynamic) as double,
+          throwsCastError);
     });
     test('with bad arguments', () {
       expect(
-        () => GenericClass<double, String>()..fieldS = (5 as dynamic) as String,
-        throwsTypeError,
-      );
+          () =>
+              GenericClass<double, String>()..fieldS = (5 as dynamic) as String,
+          throwsCastError);
     });
   });
 
@@ -66,7 +63,7 @@ void main() {
         {const Duration(milliseconds: 3), const Duration(milliseconds: 4)},
       );
 
-      String encodeDateTime(DateTime value) => value.toIso8601String();
+      String encodeDateTime(DateTime value) => value?.toIso8601String();
       int encodeDuration(Duration value) => value.inMilliseconds;
 
       final encodedJson = loudEncode(
@@ -107,56 +104,6 @@ void main() {
   ],
   "someSet": [
    "2"
-  ]
- },
- "value3": {
-  "value": 3.14,
-  "list": [
-   3.14
-  ],
-  "someSet": [
-   "2"
-  ]
- }
-}''';
-
-      final instance = ConcreteClass.fromJson(
-        jsonDecode(inputJson) as Map<String, dynamic>,
-      );
-
-      expect(loudEncode(instance), inputJson);
-    });
-
-    test('round trip decode/decode with null', () {
-      const inputJson = r'''
-{
- "value": {
-  "value": 5,
-  "list": [
-   5
-  ],
-  "someSet": [
-   "string"
-  ]
- },
- "value2": {
-  "value": 3.14,
-  "list": [
-   3.14
-  ],
-  "someSet": [
-   "2"
-  ]
- },
- "value3": {
-  "value": null,
-  "list": [
-   3.14,
-   null
-  ],
-  "someSet": [
-   "2",
-   null
   ]
  }
 }''';

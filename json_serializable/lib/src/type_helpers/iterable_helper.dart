@@ -9,7 +9,6 @@ import '../constants.dart';
 import '../lambda_result.dart';
 import '../shared_checkers.dart';
 import '../type_helper.dart';
-import '../utils.dart';
 
 class IterableHelper extends TypeHelper<TypeHelperContextWithConfig> {
   const IterableHelper();
@@ -32,7 +31,7 @@ class IterableHelper extends TypeHelper<TypeHelperContextWithConfig> {
     var isList = _coreListChecker.isAssignableFromType(targetType);
     final subField = context.serialize(itemType, closureArg);
 
-    var optionalQuestion = targetType.isNullableType ? '?' : '';
+    final optionalQuestion = context.nullable ? '?' : '';
 
     // In the case of trivial JSON types (int, String, etc), `subField`
     // will be identical to `substitute` – so no explicit mapping is needed.
@@ -45,9 +44,6 @@ class IterableHelper extends TypeHelper<TypeHelperContextWithConfig> {
       // expression now represents an Iterable (even if it started as a List
       // ...resetting `isList` to `false`.
       isList = false;
-
-      // No need to include the optional question below – it was used here!
-      optionalQuestion = '';
     }
 
     if (!isList) {
@@ -63,7 +59,6 @@ class IterableHelper extends TypeHelper<TypeHelperContextWithConfig> {
     DartType targetType,
     String expression,
     TypeHelperContext context,
-    bool defaultProvided,
   ) {
     if (!(coreIterableTypeChecker.isExactlyType(targetType) ||
         _coreListChecker.isExactlyType(targetType) ||
@@ -75,13 +70,7 @@ class IterableHelper extends TypeHelper<TypeHelperContextWithConfig> {
 
     final itemSubVal = context.deserialize(iterableGenericType, closureArg);
 
-    var output = '$expression as List<dynamic>';
-
-    final targetTypeIsNullable = defaultProvided || targetType.isNullableType;
-
-    if (targetTypeIsNullable) {
-      output += '?';
-    }
+    var output = '$expression as List';
 
     // If `itemSubVal` is the same and it's not a Set, then we don't need to do
     // anything fancy
@@ -92,13 +81,11 @@ class IterableHelper extends TypeHelper<TypeHelperContextWithConfig> {
 
     output = '($output)';
 
-    var optionalQuestion = targetTypeIsNullable ? '?' : '';
+    final optionalQuestion = context.nullable ? '?' : '';
 
     if (closureArg != itemSubVal) {
       final lambda = LambdaResult.process(itemSubVal, closureArg);
       output += '$optionalQuestion.map($lambda)';
-      // No need to include the optional question below – it was used here!
-      optionalQuestion = '';
     }
 
     if (_coreListChecker.isExactlyType(targetType)) {

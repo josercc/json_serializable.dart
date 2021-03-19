@@ -2,8 +2,6 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
-// @dart=2.12
-
 import 'package:json_annotation/json_annotation.dart';
 
 part 'generic_argument_factories.g.dart';
@@ -24,14 +22,14 @@ class GenericClassWithHelpers<T, S> {
 
   factory GenericClassWithHelpers.fromJson(
     Map<String, dynamic> json,
-    T Function(Object? json) fromJsonT,
-    S Function(Object? json) fromJsonS,
+    T Function(Object json) fromJsonT,
+    S Function(Object json) fromJsonS,
   ) =>
       _$GenericClassWithHelpersFromJson(json, fromJsonT, fromJsonS);
 
   Map<String, dynamic> toJson(
-    Object? Function(T value) toJsonT,
-    Object? Function(S value) toJsonS,
+    Object Function(T value) toJsonT,
+    Object Function(S value) toJsonS,
   ) =>
       _$GenericClassWithHelpersToJson(this, toJsonT, toJsonS);
 }
@@ -42,10 +40,7 @@ class ConcreteClass {
 
   final GenericClassWithHelpers<double, BigInt> value2;
 
-  // Regression scenario for google/json_serializable.dart#803
-  final GenericClassWithHelpers<double?, BigInt?> value3;
-
-  ConcreteClass(this.value, this.value2, this.value3);
+  ConcreteClass(this.value, this.value2);
 
   factory ConcreteClass.fromJson(Map<String, dynamic> json) =>
       _$ConcreteClassFromJson(json);

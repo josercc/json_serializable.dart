@@ -1,5 +1,4 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// @dart=2.12
 
 part of 'input.type_int.dart';
 
@@ -10,26 +9,13 @@ part of 'input.type_int.dart';
 SimpleClass _$SimpleClassFromJson(Map<String, dynamic> json) {
   return SimpleClass(
     json['value'] as int,
-    json['withDefault'] as int? ?? 42,
-  );
+    json['nullable'] as int,
+  )..withDefault = json['withDefault'] as int ?? 42;
 }
 
 Map<String, dynamic> _$SimpleClassToJson(SimpleClass instance) =>
     <String, dynamic>{
       'value': instance.value,
-      'withDefault': instance.withDefault,
-    };
-
-SimpleClassNullable _$SimpleClassNullableFromJson(Map<String, dynamic> json) {
-  return SimpleClassNullable(
-    json['value'] as int?,
-    json['withDefault'] as int? ?? 42,
-  );
-}
-
-Map<String, dynamic> _$SimpleClassNullableToJson(
-        SimpleClassNullable instance) =>
-    <String, dynamic>{
-      'value': instance.value,
+      'nullable': instance.nullable,
       'withDefault': instance.withDefault,
     };

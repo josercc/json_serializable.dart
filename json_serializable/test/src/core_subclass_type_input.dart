@@ -1,5 +1,3 @@
-// @dart=2.12
-
 part of '_json_serializable_test_input.dart';
 
 @ShouldThrow(
@@ -11,7 +9,7 @@ $converterOrKeyInstructions''',
 )
 @JsonSerializable(createToJson: false)
 class UnsupportedMapField {
-  late MapView mapView;
+  MapView mapView;
 }
 
 @ShouldThrow(
@@ -23,7 +21,7 @@ $converterOrKeyInstructions''',
 )
 @JsonSerializable(createToJson: false)
 class UnsupportedListField {
-  late UnmodifiableListView listView;
+  UnmodifiableListView listView;
 }
 
 @ShouldThrow(
@@ -35,7 +33,7 @@ $converterOrKeyInstructions''',
 )
 @JsonSerializable(createToJson: false)
 class UnsupportedSetField {
-  late _CustomSet customSet;
+  _CustomSet customSet;
 }
 
 abstract class _CustomSet implements Set {}
@@ -49,7 +47,7 @@ $converterOrKeyInstructions''',
 )
 @JsonSerializable(createToJson: false)
 class UnsupportedDurationField {
-  late _CustomDuration customDuration;
+  _CustomDuration customDuration;
 }
 
 abstract class _CustomDuration implements Duration {}
@@ -63,7 +61,7 @@ $converterOrKeyInstructions''',
 )
 @JsonSerializable(createToJson: false)
 class UnsupportedUriField {
-  _CustomUri? customUri;
+  _CustomUri customUri;
 }
 
 abstract class _CustomUri implements Uri {}
@@ -77,7 +75,7 @@ $converterOrKeyInstructions''',
 )
 @JsonSerializable(createToJson: false)
 class UnsupportedDateTimeField {
-  late _CustomDateTime customDateTime;
+  _CustomDateTime customDateTime;
 }
 
 abstract class _CustomDateTime implements DateTime {}

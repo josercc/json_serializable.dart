@@ -5,7 +5,6 @@
 import 'package:analyzer/dart/element/type.dart';
 
 import '../type_helper.dart';
-import '../utils.dart';
 import 'to_from_string.dart';
 
 class DateTimeHelper extends TypeHelper {
@@ -17,23 +16,14 @@ class DateTimeHelper extends TypeHelper {
     String expression,
     TypeHelperContext context,
   ) =>
-      dateTimeString.serialize(
-        targetType,
-        expression,
-        targetType.isNullableType,
-      );
+      dateTimeString.serialize(targetType, expression, context.nullable);
 
   @override
   String deserialize(
     DartType targetType,
     String expression,
     TypeHelperContext context,
-    bool defaultProvided,
   ) =>
       dateTimeString.deserialize(
-        targetType,
-        expression,
-        targetType.isNullableType,
-        false,
-      );
+          targetType, expression, context.nullable, false);
 }

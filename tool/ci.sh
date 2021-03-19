@@ -1,5 +1,5 @@
 #!/bin/bash
-# Created with package:mono_repo v3.4.7
+# Created with package:mono_repo v3.3.0
 
 # Support built in commands on windows out of the box.
 function pub() {
@@ -58,9 +58,13 @@ for PKG in ${PKGS}; do
       echo
       echo -e "\033[1mPKG: ${PKG}; TASK: ${TASK}\033[22m"
       case ${TASK} in
-      dartanalyzer)
-        echo 'dartanalyzer --fatal-infos .'
-        dartanalyzer --fatal-infos . || EXIT_CODE=$?
+      dartanalyzer_0)
+        echo 'dartanalyzer --fatal-warnings --fatal-infos .'
+        dartanalyzer --fatal-warnings --fatal-infos . || EXIT_CODE=$?
+        ;;
+      dartanalyzer_1)
+        echo 'dartanalyzer --fatal-warnings .'
+        dartanalyzer --fatal-warnings . || EXIT_CODE=$?
         ;;
       dartfmt)
         echo 'dartfmt -n --set-exit-if-changed .'

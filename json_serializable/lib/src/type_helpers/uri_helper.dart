@@ -5,7 +5,6 @@
 import 'package:analyzer/dart/element/type.dart';
 
 import '../type_helper.dart';
-import '../utils.dart';
 import 'to_from_string.dart';
 
 class UriHelper extends TypeHelper {
@@ -17,19 +16,13 @@ class UriHelper extends TypeHelper {
     String expression,
     TypeHelperContext context,
   ) =>
-      uriString.serialize(
-        targetType,
-        expression,
-        targetType.isNullableType,
-      );
+      uriString.serialize(targetType, expression, context.nullable);
 
   @override
   String deserialize(
     DartType targetType,
     String expression,
     TypeHelperContext context,
-    bool defaultProvided,
   ) =>
-      uriString.deserialize(
-          targetType, expression, targetType.isNullableType, false);
+      uriString.deserialize(targetType, expression, context.nullable, false);
 }

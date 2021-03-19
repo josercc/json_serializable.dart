@@ -1,5 +1,3 @@
-// @dart=2.12
-
 part of '_json_serializable_test_input.dart';
 
 @ShouldGenerate(r'''
@@ -11,8 +9,8 @@ WithANonCtorGetterChecked _$WithANonCtorGetterCheckedFromJson(
         requiredKeys: const ['items'],
         disallowNullValues: const ['items']);
     final val = WithANonCtorGetterChecked(
-      $checkedConvert(json, 'items',
-          (v) => (v as List<dynamic>).map((e) => e as String).toList()),
+      $checkedConvert(
+          json, 'items', (v) => (v as List)?.map((e) => e as String)?.toList()),
     );
     return val;
   });
@@ -39,7 +37,7 @@ WithANonCtorGetter _$WithANonCtorGetterFromJson(Map<String, dynamic> json) {
       requiredKeys: const ['items'],
       disallowNullValues: const ['items']);
   return WithANonCtorGetter(
-    (json['items'] as List<dynamic>).map((e) => e as String).toList(),
+    (json['items'] as List)?.map((e) => e as String)?.toList(),
   );
 }
 ''')

@@ -9,10 +9,10 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:source_gen/source_gen.dart';
 
 import '../helper_core.dart';
+import '../json_key_utils.dart';
 import '../lambda_result.dart';
 import '../shared_checkers.dart';
 import '../type_helper.dart';
-import '../utils.dart';
 
 /// A [TypeHelper] that supports classes annotated with implementations of
 /// [JsonConverter].
@@ -31,6 +31,8 @@ class JsonConverterHelper extends TypeHelper {
       return null;
     }
 
+    logFieldWithConversionFunction(context.fieldElement);
+
     return LambdaResult(expression, '${converter.accessString}.toJson');
   }
 
@@ -39,7 +41,6 @@ class JsonConverterHelper extends TypeHelper {
     DartType targetType,
     String expression,
     TypeHelperContext context,
-    bool defaultProvided,
   ) {
     final converter = _typeConverter(targetType, context);
     if (converter == null) {
@@ -47,6 +48,8 @@ class JsonConverterHelper extends TypeHelper {
     }
 
     final asContent = asStatement(converter.jsonType);
+
+    logFieldWithConversionFunction(context.fieldElement);
 
     return LambdaResult(
         '$expression$asContent', '${converter.accessString}.fromJson');
@@ -206,7 +209,7 @@ _ConverterMatch _compatibleMatch(
       annotation,
       constantValue,
       jsonConverterSuper.typeArguments[1],
-      '${targetType.element.name}${targetType.isNullableType ? '?' : ''}',
+      targetType.element.name,
     );
   }
 

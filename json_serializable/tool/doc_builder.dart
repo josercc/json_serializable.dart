@@ -21,7 +21,7 @@ class _DocBuilder extends Builder {
     final lockFileAssetId = AssetId(buildStep.inputId.package, 'pubspec.lock');
     final lockFileContent = await buildStep.readAsString(lockFileAssetId);
     final lockFileYaml =
-        loadYaml(lockFileContent, sourceUrl: lockFileAssetId.uri) as YamlMap;
+        loadYaml(lockFileContent, sourceUrl: lockFileAssetId.uri);
     final pkgMap = lockFileYaml['packages'] as YamlMap;
     final jsonAnnotationMap = pkgMap['json_annotation'] as YamlMap;
     final jsonAnnotationVersionString = jsonAnnotationMap['version'] as String;
@@ -33,13 +33,8 @@ class _DocBuilder extends Builder {
         ? 'latest'
         : jsonAnnotationVersion.toString();
 
-    final lib = LibraryReader(
-      await buildStep.resolver.libraryFor(
-        AssetId.resolve(
-          Uri.parse('package:json_annotation/json_annotation.dart'),
-        ),
-      ),
-    );
+    final lib = LibraryReader(await buildStep.resolver.libraryFor(
+        AssetId.resolve('package:json_annotation/json_annotation.dart')));
 
     final descriptionMap = <String, _FieldInfo>{};
 

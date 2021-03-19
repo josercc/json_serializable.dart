@@ -55,8 +55,9 @@ class JsonHelper extends TypeHelper<TypeHelperContextWithConfig> {
     }
 
     if (context.config.explicitToJson || toJsonArgs.isNotEmpty) {
-      return '$expression${interfaceType.isNullableType ? '?' : ''}'
-          '.toJson(${toJsonArgs.map((a) => '$a, ').join()} )';
+      return '${targetType.displayName}JsonConver().toJson($expression)';
+      // return '$expression${context.nullable ? '?' : ''}'
+      // '.toJson(${toJsonArgs.map((a) => '$a, ').join()} )';
     }
     return expression;
   }
@@ -66,7 +67,6 @@ class JsonHelper extends TypeHelper<TypeHelperContextWithConfig> {
     DartType targetType,
     String expression,
     TypeHelperContextWithConfig context,
-    bool defaultProvided,
   ) {
     if (targetType is! InterfaceType) {
       return null;
@@ -75,14 +75,11 @@ class JsonHelper extends TypeHelper<TypeHelperContextWithConfig> {
     final type = targetType as InterfaceType;
     final classElement = type.element;
 
-    final fromJsonCtor = classElement.constructors
-        .singleWhere((ce) => ce.name == 'fromJson', orElse: () => null);
+    final fromJsonCtor = classElement.constructors.singleWhere((ce) => ce.name == 'fromJson', orElse: () => null);
 
     var output = expression;
     if (fromJsonCtor != null) {
-      final positionalParams = fromJsonCtor.parameters
-          .where((element) => element.isPositional)
-          .toList();
+      final positionalParams = fromJsonCtor.parameters.where((element) => element.isPositional).toList();
 
       if (positionalParams.isEmpty) {
         throw InvalidGenerationSourceError(
@@ -127,10 +124,10 @@ class JsonHelper extends TypeHelper<TypeHelperContextWithConfig> {
 
     // TODO: the type could be imported from a library with a prefix!
     // https://github.com/google/json_serializable.dart/issues/19
-    output = '${targetType.element.name}.fromJson($output)';
-
-    return commonNullPrefix(targetType.isNullableType, expression, output)
-        .toString();
+    // print("❌ ${targetType.element.name} ❌ $output");
+    output = "${targetType.element.name}JsonConver().fromJson($output)";
+    // output = '${targetType.element.name}.fromJson($output)';
+    return commonNullPrefix(context.nullable, expression, output).toString();
   }
 }
 
@@ -149,8 +146,7 @@ List<String> _helperParams(
   final args = <String>[];
 
   for (var helperArg in rest) {
-    final typeParamIndex =
-        type.element.typeParameters.indexOf(helperArg.element);
+    final typeParamIndex = type.element.typeParameters.indexOf(helperArg.element);
 
     // TODO: throw here if `typeParamIndex` is -1 ?
     final typeArg = type.typeArguments[typeParamIndex];
@@ -167,16 +163,13 @@ TypeParameterType _decodeHelper(
 ) {
   final type = param.type;
 
-  if (type is FunctionType &&
-      type.returnType is TypeParameterType &&
-      type.normalParameterTypes.length == 1) {
+  if (type is FunctionType && type.returnType is TypeParameterType && type.normalParameterTypes.length == 1) {
     final funcReturnType = type.returnType;
 
     if (param.name == fromJsonForName(funcReturnType.element.name)) {
       final funcParamType = type.normalParameterTypes.single;
 
-      if ((funcParamType.isDartCoreObject && funcParamType.isNullableType) ||
-          funcParamType.isDynamic) {
+      if (funcParamType.isDartCoreObject || funcParamType.isDynamic) {
         return funcReturnType as TypeParameterType;
       }
     }
@@ -186,7 +179,7 @@ TypeParameterType _decodeHelper(
     'Expecting a `fromJson` constructor with exactly one positional '
     'parameter. '
     'The only extra parameters allowed are functions of the form '
-    '`T Function(Object?) ${fromJsonForName('T')}` where `T` is a type '
+    '`T Function(Object) ${fromJsonForName('T')}` where `T` is a type '
     'parameter of the target type.',
     element: targetElement,
   );
@@ -198,9 +191,7 @@ TypeParameterType _encodeHelper(
 ) {
   final type = param.type;
 
-  if (type is FunctionType &&
-      (type.returnType.isDartCoreObject || type.returnType.isDynamic) &&
-      type.normalParameterTypes.length == 1) {
+  if (type is FunctionType && isObjectOrDynamic(type.returnType) && type.normalParameterTypes.length == 1) {
     final funcParamType = type.normalParameterTypes.single;
 
     if (param.name == toJsonForName(funcParamType.element.name)) {

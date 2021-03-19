@@ -2,11 +2,7 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
-// @dart=2.12
-
 // ignore_for_file: prefer_const_declarations
-
-import 'dart:convert';
 
 @TestOn('vm')
 import 'package:test/test.dart';
@@ -15,63 +11,33 @@ import '../test_utils.dart';
 import 'input.dart';
 
 void main() {
-  group('non-nullable', () {
-    test('round trip', () {
-      final object = SimpleClass.fromJson(_defaultInput);
-      final encoded = loudEncode(object);
+  test('round trip', () {
+    final object = SimpleClass.fromJson(_emptyInput);
+    expect(loudEncode(object), loudEncode(_defaultOutput));
+  });
 
-      expect(encoded, loudEncode(_defaultOutput));
-
-      final object2 = SimpleClass.fromJson(
-        jsonDecode(encoded) as Map<String, Object?>,
-      );
-      expect(loudEncode(object2), encoded);
-    });
-
-    test('round trip null', () {
-      final object = SimpleClass.fromJson({});
-      final encoded = loudEncode(object);
-
-      expect(encoded, loudEncode(_nullableDefaultOutput));
-      final object2 = SimpleClass.fromJson(
-        jsonDecode(encoded) as Map<String, Object?>,
-      );
-      expect(loudEncode(object2), encoded);
-    });
-
-    test('round trip alternate values', () {
-      final object = SimpleClass.fromJson(_nonDefaultJson);
-      final encoded = loudEncode(object);
-
-      expect(encoded, loudEncode(_nonDefaultJson));
-      expect(encoded, isNot(loudEncode(_defaultOutput)));
-
-      final object2 = SimpleClass.fromJson(
-        jsonDecode(encoded) as Map<String, Object?>,
-      );
-      expect(loudEncode(object2), encoded);
-    });
-  }); // end non-nullable group
+  test('round trip alternate values', () {
+    final object = SimpleClass.fromJson(_nonDefaultJson);
+    expect(loudEncode(object), loudEncode(_nonDefaultJson));
+    expect(loudEncode(object), isNot(loudEncode(_defaultOutput)));
+  });
 }
 
 final _defaultValue = 42;
 final _altValue = 43;
 
-final _defaultInput = <String, Object?>{
-  'value': _defaultValue,
+final _emptyInput = <String, dynamic>{
+  'nullable': _defaultValue,
 };
 
 final _defaultOutput = {
-  'value': _defaultValue,
-  'withDefault': _defaultValue,
-};
-
-final _nullableDefaultOutput = {
   'value': null,
+  'nullable': _defaultValue,
   'withDefault': _defaultValue,
 };
 
 final _nonDefaultJson = {
-  'value': _altValue,
+  'value': null,
+  'nullable': _altValue,
   'withDefault': _altValue,
 };

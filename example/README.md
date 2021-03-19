@@ -1,24 +1,24 @@
-_This example assumes you're using a recent version of the Dart or Flutter SDK._
+*This example assumes you're using a recent version of the Dart or Flutter SDK.*
 
 To use [package:json_serializable][json_serializable] in your package, add these
 dependencies to your `pubspec.yaml`.
 
 ```yaml
 dependencies:
-  json_annotation: ^4.0.0
+  json_annotation: ^3.0.0
 
 dev_dependencies:
   build_runner: ^1.0.0
-  json_serializable: ^4.0.0
+  json_serializable: ^3.2.0
 ```
 
 Annotate your code with classes defined in
 [package:json_annotation][json_annotation].
 
-- See [`lib/example.dart`][example] for an example of a file using these
+* See [`lib/example.dart`][example] for an example of a file using these
   annotations.
 
-- See [`lib/example.g.dart`][example_g] for the generated file.
+* See [`lib/example.g.dart`][example_g] for the generated file.
 
 Run `pub run build_runner build` to generate files into your source directory.
 
@@ -32,8 +32,7 @@ Run `pub run build_runner build` to generate files into your source directory.
 [INFO] Build: Succeeded after 4687ms with 1 outputs
 ```
 
-_NOTE_: If you're using Flutter, replace `pub run` with
-`flutter packages pub run`.
+*NOTE*: If you're using Flutter, replace `pub run` with `flutter packages pub run`.
 
 [example]: lib/example.dart
 [example_g]: lib/example.g.dart

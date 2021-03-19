@@ -6,7 +6,6 @@ import 'package:analyzer/dart/element/type.dart';
 import 'package:source_gen/source_gen.dart' show TypeChecker;
 
 import '../type_helper.dart';
-import '../utils.dart';
 
 class DurationHelper extends TypeHelper {
   const DurationHelper();
@@ -23,7 +22,7 @@ class DurationHelper extends TypeHelper {
 
     final buffer = StringBuffer(expression);
 
-    if (targetType.isNullableType) {
+    if (context.nullable) {
       buffer.write('?');
     }
 
@@ -37,14 +36,13 @@ class DurationHelper extends TypeHelper {
     DartType targetType,
     String expression,
     TypeHelperContext context,
-    bool defaultProvided,
   ) {
     if (!_matchesType(targetType)) {
       return null;
     }
 
     return commonNullPrefix(
-      targetType.isNullableType,
+      context.nullable,
       expression,
       'Duration(microseconds: $expression as int)',
     ).toString();

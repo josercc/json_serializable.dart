@@ -22,7 +22,7 @@ Future<void> main() async {
   );
 }
 
-const _expectedAnnotatedTests = {
+const _expectedAnnotatedTests = [
   'annotatedMethod',
   'BadFromFuncReturnType',
   'BadNoArgs',
@@ -34,6 +34,8 @@ const _expectedAnnotatedTests = {
   'DefaultWithDisallowNullRequiredClass',
   'DefaultWithFunction',
   'DefaultWithNestedEnum',
+  'DefaultWithNonNullableClass',
+  'DefaultWithNonNullableField',
   'DefaultWithSymbol',
   'DefaultWithToJsonClass',
   'DefaultWithType',
@@ -47,7 +49,6 @@ const _expectedAnnotatedTests = {
   'FinalFields',
   'FinalFieldsNotSetInCtor',
   'FromDynamicCollection',
-  'FromNullableDynamicCollection',
   'GeneralTestClass1',
   'GeneralTestClass2',
   'GenericArgumentFactoriesFlagWithoutGenericType',
@@ -63,21 +64,18 @@ const _expectedAnnotatedTests = {
   'InvalidFromFunc2Args',
   'InvalidToFunc2Args',
   'Issue713',
-  'JsonConvertOnField',
   'JsonConverterCtorParams',
   'JsonConverterDuplicateAnnotations',
   'JsonConverterNamedCtor',
   'JsonConverterOnGetter',
   'JsonConverterWithBadTypeArg',
+  'JsonConvertOnField',
   'JsonValueValid',
   'JsonValueWithBool',
   'JustSetter',
   'JustSetterNoFromJson',
   'JustSetterNoToJson',
   'KeyDupesField',
-  'MapKeyNoNullableInt',
-  'MapKeyNoNullableObject',
-  'MapKeyNoNullableString',
   'MapKeyVariety',
   'NoCtorClass',
   'NoDeserializeBadKey',
@@ -116,4 +114,4 @@ const _expectedAnnotatedTests = {
   'ValidToFromFuncClassStatic',
   'WithANonCtorGetter',
   'WithANonCtorGetterChecked',
-};
+];

@@ -2,8 +2,6 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
-// @dart=2.12
-
 import 'package:json_annotation/json_annotation.dart';
 
 part 'input.type_object.g.dart';
@@ -12,34 +10,16 @@ part 'input.type_object.g.dart';
 class SimpleClass {
   final Object value;
 
-  @JsonKey(defaultValue: 'o1')
-  Object withDefault;
+  @JsonKey(nullable: false)
+  final Object nullable;
 
   SimpleClass(
     this.value,
-    this.withDefault,
+    this.nullable,
   );
 
-  factory SimpleClass.fromJson(Map<String, Object?> json) =>
+  factory SimpleClass.fromJson(Map<String, dynamic> json) =>
       _$SimpleClassFromJson(json);
 
-  Map<String, Object?> toJson() => _$SimpleClassToJson(this);
-}
-
-@JsonSerializable()
-class SimpleClassNullable {
-  final Object? value;
-
-  @JsonKey(defaultValue: 'o1')
-  Object? withDefault;
-
-  SimpleClassNullable(
-    this.value,
-    this.withDefault,
-  );
-
-  factory SimpleClassNullable.fromJson(Map<String, Object?> json) =>
-      _$SimpleClassNullableFromJson(json);
-
-  Map<String, Object?> toJson() => _$SimpleClassNullableToJson(this);
+  Map<String, dynamic> toJson() => _$SimpleClassToJson(this);
 }

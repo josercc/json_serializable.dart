@@ -12,7 +12,7 @@ import 'package:yaml/yaml.dart';
 Builder validate(String builderName, Builder builder) {
   var buildYaml = loadYaml(
     File('build.yaml').readAsStringSync(),
-    sourceUrl: Uri.parse('build.yaml'),
+    sourceUrl: 'build.yaml',
   ) as YamlMap;
 
   for (var key in ['builders', builderName, 'build_extensions']) {
